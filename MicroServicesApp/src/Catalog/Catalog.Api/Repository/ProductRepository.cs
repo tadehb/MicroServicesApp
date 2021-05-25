@@ -30,7 +30,7 @@ namespace Catalog.Api.Repository
 
         }
 
-        public async Task<Product> GetProduct(string id)
+        public async Task<Product> GetProductById(string id)
         {
             return await _context
                 .Products
@@ -39,10 +39,10 @@ namespace Catalog.Api.Repository
 
         public async Task<IEnumerable<Product>> GetProductByCategory(string category)
         {
-            FilterDefinition<Product> filter = Builders<Product>.Filter.ElemMatch(x => x.Category, category);
+            //FilterDefinition<Product> filter = Builders<Product>.Filter.ElemMatch(x => x.Category, category);
             return await _context
                 .Products
-                .Find(filter).ToListAsync();
+                .Find(x=>x.Category == category).ToListAsync();
         }
 
         public async Task<IEnumerable<Product>> GetProductByName(string name)

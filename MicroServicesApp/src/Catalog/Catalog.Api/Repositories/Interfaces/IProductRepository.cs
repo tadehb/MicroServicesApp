@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Catalog.Api.Repository.Interfaces
+namespace Catalog.Api.Repositories.Interfaces
 {
     public interface IProductRepository
     {

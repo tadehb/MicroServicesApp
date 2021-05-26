@@ -1,7 +1,7 @@
 using Catalog.Api.Data;
 using Catalog.Api.Data.Interfaces;
-using Catalog.Api.Repository;
-using Catalog.Api.Repository.Interfaces;
+using Catalog.Api.Repositories;
+using Catalog.Api.Repositories.Interfaces;
 using Catalog.Api.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

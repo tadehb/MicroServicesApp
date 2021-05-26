@@ -1,3 +1,7 @@
+using Basket.Api.data;
+using Basket.Api.data.Interfaces;
+using Basket.Api.Repositories;
+using Basket.Api.Repositories.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +31,9 @@ namespace Basket.Api
                 return ConnectionMultiplexer.Connect(configuration);
 
             });
+
+            services.AddScoped<IBasketContext, BasketContext>();
+            services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

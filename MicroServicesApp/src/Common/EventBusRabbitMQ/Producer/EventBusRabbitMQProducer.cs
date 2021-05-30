@@ -27,13 +27,32 @@ namespace EventBusRabbitMQ.Producer
 
                 IBasicProperties properties = channel.CreateBasicProperties();
                 properties.Persistent = true;
-                properties.DeliveryMode = 1;
+                properties.DeliveryMode = 2;
 
                 channel.ConfirmSelect();
+                // Create Exchange
+
+                channel.ExchangeDeclare("demoExchange", ExchangeType.Direct);
+
+                Console.WriteLine("Creating Exchange");
+
+
+
+                // Create Queue
+
+                channel.QueueDeclare("demoqueue", true, false, false, null);
+
+                Console.WriteLine("Creating Queue");
+
+
+
+                // Bind Queue to Exchange
+
+                channel.QueueBind("demoqueue", "demoExchange", "directexchange_key");
                 channel.BasicPublish("", queueName,true,properties,body);
                 var publicationAddress =new  PublicationAddress("Direct", "requestTest", "testKey");
 
-                channel.BasicPublish(publicationAddress, properties, body);
+                channel.BasicPublish("demoExchange", "directexchange_key", true, properties, body);
                 channel.BasicAcks += (sender, eventArgs) =>
                 {
                     Console.WriteLine("sent to RabbitMQ");

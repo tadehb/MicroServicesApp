@@ -44,16 +44,12 @@ namespace Basket.Api
 
             services.AddSingleton<IRabbitMQConnection>(c =>
             {
-                var factory = new ConnectionFactory();
-                
-                                 
+                var factory = new ConnectionFactory {
 
-                if (!string.IsNullOrEmpty(Configuration["EventBus:Host"]))
-                {
-                    factory.HostName = Configuration["EventBus:Host"];
+                    HostName = Configuration["EventBus:Host"]
 
-                }
-
+                };
+            
                 if (!string.IsNullOrEmpty(Configuration["EventBus:UserName"]))
                 {
                     factory.UserName = Configuration["EventBus:UserName"];
@@ -67,7 +63,7 @@ namespace Basket.Api
 
                 }
 
-                factory.VirtualHost = "/";
+               
 
                 return new RabbitMQConnection(factory);
             });

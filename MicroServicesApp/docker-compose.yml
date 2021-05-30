@@ -6,7 +6,7 @@ services:
   basketdb:
     image: redis
   rabbitmq:
-    image: rabbitmq:3-managment-alpine
+    image: rabbitmq:3.8.16-managment-alpine
 
   catalog.api:
     image: ${DOCKER_REGISTRY-}catalogapi

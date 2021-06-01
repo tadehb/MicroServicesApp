@@ -6,7 +6,7 @@ services:
   basketdb:
     image: redis
   orderdb:
-    image: mcr.microsoft.com/mssql/server
+    image: mcr.microsoft.com/mssql/server:2019-CU10-ubuntu-20.04
   rabbitmq:
     image: rabbitmq:3-management-alpine
 

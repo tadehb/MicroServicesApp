@@ -30,19 +30,18 @@ namespace Ordering.Api.RabbitMQ
         public void Consume()
         {
             var channel = _connection.CreateModel();
-            channel.QueueDeclare(EventBusConstants.BasketCheckoutQueue, false, false, false, null);
-
+            channel.BasicQos(0, 1, false);
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += ReceivedEvent;
 
             channel.BasicConsume(EventBusConstants.BasketCheckoutQueue, true, consumer);
         }
 
-        private async void ReceivedEvent(object sender, BasicDeliverEventArgs e)
+        private async void ReceivedEvent(object sender, BasicDeliverEventArgs @e)
         {
             if (e.RoutingKey == EventBusConstants.BasketCheckoutQueue)
             {
-                var message = Encoding.UTF8.GetString(e.Body.Span);
+                var message = Encoding.UTF8.GetString(@e.Body.Span);
                 var basketCheckoutEvent = JsonConvert.DeserializeObject<BasketCheckoutEvent>(message);
                 var command = _mapper.Map<CheckoutOrderCommand>(basketCheckoutEvent);
 

@@ -20,7 +20,7 @@ namespace EventBusRabbitMQ.Producer
         {
             using (var channel = _connection.CreateModel())
             {
-                channel.QueueDeclare(queue: queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
+                //channel.QueueDeclare(queue: queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
                 var message = JsonConvert.SerializeObject(publishModel);
                 var body = Encoding.UTF8.GetBytes(message);
 
@@ -31,7 +31,7 @@ namespace EventBusRabbitMQ.Producer
 
                 channel.ConfirmSelect();
 
-                channel.BasicPublish("", queueName, true, properties, body);
+                channel.BasicPublish("amq.direct", queueName, true, properties, body);
                 channel.BasicAcks += (sender, eventArgs) =>
                 {
                     Console.WriteLine("sent to RabbitMQ");

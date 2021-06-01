@@ -11,7 +11,16 @@ services:
   basketdb:
     container_name: basketdb
     restart: always
-   
+
+  orderdb:
+    container_name: orderdb
+    restart: always
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "Tbca422"
+      ACCEPT_EULA: "Y"
+         
   rabbitmq:
     container_name: rabbitmq-run
     restart: always
@@ -46,4 +55,21 @@ services:
     ports:
       - "8001:80"
 
+
+
+  ordering.api:
+    container_name: ordering.api
+    restart: on-failure
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:OrderConnection=Server=orderdb;Database=OrderDb;User Id=sa;Password=Tbca422"
+      - "EventBus:Host=rabbitmq"
+    depends_on:
+      - orderdb
+      - rabbitmq
+    volumes:
+      - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
+      - ${HOME}/.aspnet/https:/root/.aspnet/https/
+    ports:
+      - "8002:80"
 

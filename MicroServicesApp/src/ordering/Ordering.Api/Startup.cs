@@ -42,17 +42,14 @@ namespace Ordering.Api
 
             services.AddControllers();
             services.AddDbContext<OrderContext>(c => c.UseSqlServer(Configuration.GetConnectionString("OrderConnection")),ServiceLifetime.Singleton);
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Ordering.Api", Version = "v1" });
-            });
+         
+                 
+            services.AddScoped(typeof(IRepository<>),typeof(Repository<>));
+            services.AddScoped(typeof(IOrderRepository),typeof(OrderRepository));
+            services.AddTransient<IOrderRepository, OrderRepository>();
 
             services.AddAutoMapper(typeof(Startup));
             services.AddMediatR(typeof(CheckoutOrderHandler));
-
-            services.AddTransient<IOrderRepository,OrderRepository>();
-            services.AddScoped(typeof(IRepository<>),typeof(Repository<>));
-            services.AddScoped(typeof(IOrderRepository),typeof(OrderRepository));
 
             services.AddSingleton<IRabbitMQConnection>(c =>
             {
@@ -90,6 +87,11 @@ namespace Ordering.Api
                 config.AssumeDefaultVersionWhenUnspecified = true;
                 config.ReportApiVersions = true;
             });
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Ordering.Api", Version = "v1" });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

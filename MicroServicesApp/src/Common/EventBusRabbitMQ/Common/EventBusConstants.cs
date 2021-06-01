@@ -2,6 +2,6 @@
 {
     public static class EventBusConstants
     {
-        public const string BasketCheckoutQueue = "basketCheckoutQueue";
+        public const string BasketCheckoutQueue = "test_key";
     }
 }

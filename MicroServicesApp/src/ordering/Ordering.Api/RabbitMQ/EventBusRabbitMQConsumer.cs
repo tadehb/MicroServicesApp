@@ -40,7 +40,7 @@ namespace Ordering.Api.RabbitMQ
 
         private async void ReceivedEvent(object sender, BasicDeliverEventArgs @e)
         {
-            if (e.RoutingKey == EventBusConstants.BasketCheckoutQueue)
+            if (e.RoutingKey == "directexchange_key")
             {
                 var message = Encoding.UTF8.GetString(@e.Body.Span);
                 var basketCheckoutEvent = JsonConvert.DeserializeObject<BasketCheckoutEvent>(message);

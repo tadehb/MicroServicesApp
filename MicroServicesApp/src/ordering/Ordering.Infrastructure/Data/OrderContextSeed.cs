@@ -18,7 +18,7 @@ namespace Ordering.Infrastructure.Data
 
             try
             {
-                orderContext.Database.Migrate();
+                
 
                 if (!orderContext.Orders.Any())
                 {
@@ -37,6 +37,8 @@ namespace Ordering.Infrastructure.Data
                     await SeedAsync(orderContext,loggerFactory,retryForAvailability);
                 }
             }
+
+            orderContext.Database.Migrate();
         }
 
         private static IEnumerable<Order> GetPreConfiguredPrders()

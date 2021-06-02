@@ -18,7 +18,7 @@ namespace Ordering.Infrastructure.Data
 
             try
             {
-                
+                orderContext.Database.Migrate();
 
                 if (!orderContext.Orders.Any())
                 {
@@ -38,7 +38,7 @@ namespace Ordering.Infrastructure.Data
                 }
             }
 
-            orderContext.Database.Migrate();
+            
         }
 
         private static IEnumerable<Order> GetPreConfiguredPrders()

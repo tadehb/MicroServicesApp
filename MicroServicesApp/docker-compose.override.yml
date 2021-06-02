@@ -55,8 +55,6 @@ services:
     ports:
       - "8001:80"
 
-
-
   ordering.api:
     container_name: ordering.api
     restart: on-failure

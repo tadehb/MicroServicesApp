@@ -29,7 +29,7 @@ namespace Ordering.Infrastructure.Data
             catch (Exception ex)
             {
 
-                if (retryForAvailability < 3)
+                while (retryForAvailability < 10)
                 {
                     retryForAvailability++;
                     var log = loggerFactory.CreateLogger<OrderContextSeed>();

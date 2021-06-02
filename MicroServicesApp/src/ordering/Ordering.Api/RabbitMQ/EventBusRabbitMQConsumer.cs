@@ -5,10 +5,12 @@ using EventBusRabbitMQ.Interfaces;
 using MediatR;
 using Newtonsoft.Json;
 using Ordering.Application.Commands;
+using Ordering.Application.Responses;
 using Ordering.Core.Repositories;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Ordering.Api.RabbitMQ
 {
@@ -30,15 +32,29 @@ namespace Ordering.Api.RabbitMQ
         public void Consume()
         {
             var channel = _connection.CreateModel();
-            channel.QueueDeclare(EventBusConstants.BasketCheckoutQueue,false,false,false,null);
+            channel.ExchangeDeclare(exchange: "amq.direct", type: "direct");
+            channel.QueueDeclare(queue: EventBusConstants.BasketCheckoutQueue, exclusive: false);
+            channel.QueueBind(queue: EventBusConstants.BasketCheckoutQueue,
+                              exchange: "amq.direct",
+                              routingKey: "directexchange_key");
+          
            
             var consumer = new EventingBasicConsumer(channel);
-            consumer.Received += ReceivedEvent;
+            consumer.Received += (model, ea) =>
+            {
+                var body = ea.Body.Span;
+                var message = Encoding.UTF8.GetString(body);
+                var result = Process(message);
+                if (result.Id !=0 || result !=null)
+                {
+                    channel.BasicAck(ea.DeliveryTag, false);
+                }
+            };
+            channel.BasicConsume(queue: EventBusConstants.BasketCheckoutQueue, consumer: consumer);
 
-            channel.BasicConsume(EventBusConstants.BasketCheckoutQueue, true, consumer);
         }
 
-        private async void ReceivedEvent(object sender, BasicDeliverEventArgs @e)
+  /*      private async void ReceivedEvent(object sender, BasicDeliverEventArgs @e)
         {
             if (e.RoutingKey == "directexchange_key")
             {
@@ -51,6 +67,14 @@ namespace Ordering.Api.RabbitMQ
             }
 
 
+        }*/
+
+        private async Task<OrderResponse> Process(string message)
+        {
+            var basketCheckoutEvent = JsonConvert.DeserializeObject<BasketCheckoutEvent>(message);
+            var command = _mapper.Map<CheckoutOrderCommand>(basketCheckoutEvent);
+
+            return await _mediator.Send(command);
         }
 
         public void Disconnect()

@@ -52,8 +52,8 @@ namespace Ordering.Api.RabbitMQ
              };*/
             channel.BasicQos(0, 1, false);
 
-            DefaultBasicConsumer consumer = new DefaultBasicConsumer(channel);
-            channel.BasicConsume(queue: EventBusConstants.BasketCheckoutQueue, consumer: consumer);
+            DefaultBasicConsumer consumer = new(channel);
+            channel.BasicConsume(consumer: consumer,queue: EventBusConstants.BasketCheckoutQueue);
 
         }
 

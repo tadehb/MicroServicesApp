@@ -32,24 +32,27 @@ namespace Ordering.Api.RabbitMQ
         public void Consume()
         {
             var channel = _connection.CreateModel();
-            channel.ExchangeDeclare(exchange: "amq.direct", type: "direct");
-            channel.QueueDeclare(queue: EventBusConstants.BasketCheckoutQueue, exclusive: false);
-            channel.QueueBind(queue: EventBusConstants.BasketCheckoutQueue,
-                              exchange: "amq.direct",
-                              routingKey: "directexchange_key");
-          
-           
-            var consumer = new EventingBasicConsumer(channel);
-            consumer.Received += (model, ea) =>
-            {
-                var body = ea.Body.Span;
-                var message = Encoding.UTF8.GetString(body);
-                var result = Process(message);
-                if (result.Id !=0 || result !=null)
-                {
-                    channel.BasicAck(ea.DeliveryTag, false);
-                }
-            };
+            /* channel.ExchangeDeclare(exchange: "amq.direct", type: "direct",true);
+             channel.QueueDeclare(queue: EventBusConstants.BasketCheckoutQueue, exclusive: false,autoDelete:false);
+             channel.QueueBind(queue: EventBusConstants.BasketCheckoutQueue,
+                               exchange: "amq.direct",
+                               routingKey: "directexchange_key");
+
+
+             var consumer = new EventingBasicConsumer(channel);
+             consumer.Received += (model, ea) =>
+             {
+                 var body = ea.Body.Span;
+                 var message = Encoding.UTF8.GetString(body);
+                 var result = Process(message);
+                 if (result.Id !=0 || result !=null)
+                 {
+                     channel.BasicAck(ea.DeliveryTag, false);
+                 }
+             };*/
+            channel.BasicQos(0, 1, false);
+
+            DefaultBasicConsumer consumer = new DefaultBasicConsumer(channel);
             channel.BasicConsume(queue: EventBusConstants.BasketCheckoutQueue, consumer: consumer);
 
         }

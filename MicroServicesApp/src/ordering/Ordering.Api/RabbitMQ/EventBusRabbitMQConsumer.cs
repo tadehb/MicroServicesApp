@@ -30,7 +30,8 @@ namespace Ordering.Api.RabbitMQ
         public void Consume()
         {
             var channel = _connection.CreateModel();
-            channel.BasicQos(0, 1, false);
+            channel.QueueDeclare(EventBusConstants.BasketCheckoutQueue,false,false,false,null);
+           
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += ReceivedEvent;
 

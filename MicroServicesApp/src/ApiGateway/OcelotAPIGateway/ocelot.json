@@ -3,7 +3,7 @@
 
     //Catalog API
     {
-      "DownstreamPathTemplate": "/api/v1/Catalog",
+      "DownstreamPathTemplate": "/api/v1.0/Catalog",
       "DownstreamPathScheme": "http",
       "DownstreamPathHostAndPorts": [
 

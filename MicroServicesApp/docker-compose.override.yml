@@ -29,7 +29,7 @@ services:
      - "15672:15672"
 
   catalog.api:
-    container_name: catalog.api
+    container_name: catalogapi
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "CatalogDatabaseSettings:ConnectionString=mongodb://catalogdb:27017"

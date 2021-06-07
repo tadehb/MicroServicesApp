@@ -38,6 +38,8 @@ services:
     volumes:
       - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
+    ports:
+      - "8000:80"
 
   basket.api:
     container_name: basket.api

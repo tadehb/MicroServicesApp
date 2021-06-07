@@ -8,7 +8,7 @@
       "DownstreamPathHostAndPorts": [
 
         {
-          "Host": "catalog.api",
+          "Host": "catalogapi",
           "Port": "80"
         }
       ],
